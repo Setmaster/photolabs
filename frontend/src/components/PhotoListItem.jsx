@@ -10,7 +10,7 @@ const PhotoListItem = ({
                            profile
                        }) => {
     return (
-        <div className="photo-list-item">
+        <div className="photo-list__item">
             <img className="photo-list-item__image" src={imageSource} alt={`Photo by ${username}`}/>
             <div className="photo-list-item__info">
                 <img className="photo-list-item__profile" src={profile} alt={`${username}'s profile`}/>
