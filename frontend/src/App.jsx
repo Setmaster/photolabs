@@ -18,10 +18,10 @@ const photos = [sampleDataForPhotoListItem, sampleDataForPhotoListItem, sampleDa
 
 // Note: Rendering a single component to build components in isolation
 const App = () => {
-    const photoItems = photos.map((photo)=>{
+    const photoItems = photos.map((photo, index)=>{
         return (
             <PhotoListItem
-                key={sampleDataForPhotoListItem.id}
+                key={sampleDataForPhotoListItem.id+index} // temporarily add index to make keys not unique since we only have one item in the array
                 id={sampleDataForPhotoListItem.id}
                 location={sampleDataForPhotoListItem.location}
                 imageSource={sampleDataForPhotoListItem.imageSource}
