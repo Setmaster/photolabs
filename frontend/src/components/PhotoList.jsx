@@ -61,7 +61,7 @@ const PhotoList = () => {
   const photoItems = sampleDataForPhotoList.map((entry, index)=>{
     return (
         <PhotoListItem
-            key={entry.id+index} // temporarily add index to make keys not unique since we only have one item in the array
+            key={entry.id}
             id={entry.id}
             location={entry.location}
             imageSource={entry.urls.full}
