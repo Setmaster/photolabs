@@ -5,7 +5,13 @@ import closeSymbol from '../assets/closeSymbol.svg';
 import {ModalContext} from "../context/ModalContext";
 
 const PhotoDetailsModal = () => {
-    const {isModalOpen, toggleModal} = useContext(ModalContext);
+    const {photoDetails, toggleModal} = useContext(ModalContext);
+
+    if (!photoDetails) return null; // prevent render if we don't have the details
+
+    const {imageSource, username, city, country, profile} = photoDetails;
+
+    console.log(imageSource, username, city, country, profile);
     
   return (
     <div className="photo-details-modal">

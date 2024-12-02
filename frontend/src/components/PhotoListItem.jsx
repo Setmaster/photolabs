@@ -12,8 +12,12 @@ const PhotoListItem = ({
                            username,
                            profile
                        }) => {
-    const {isModalOpen, toggleModal} = useContext(ModalContext);
-
+    const {openModalWithDetails} = useContext(ModalContext);
+    
+    const photoDetails = {
+        id, city, country, imageSource, username, profile
+    };
+    
     return (
         <div className="photo-list__item">
             <PhotoFavButton photoId={id}/>
@@ -21,7 +25,7 @@ const PhotoListItem = ({
                 className="photo-list__image"
                 src={imageSource}
                 alt={`Photo by ${username}`}
-                onClick={toggleModal}
+                onClick={()=>{openModalWithDetails(photoDetails)}}
             />
             <div className="photo-list__user-info">
                 <img className="photo-list__user-profile" src={profile} alt={`${username}'s profile`}/>
