@@ -1,18 +1,15 @@
 import React from 'react';
 import './App.scss';
 import HomeRoute from "./routes/HomeRoute";
-import FavoritesProvider from './context/FavoritesContext';
-import ModalProvider from "./context/ModalContext";
+import ApplicationProvider from "./context/ApplicationContext";
 
 const App = () => {
   return (
-      <FavoritesProvider>
-          <ModalProvider>
+      <ApplicationProvider>
         <div className="App">
           <HomeRoute/>
         </div>
-          </ModalProvider>
-      </FavoritesProvider>
+      </ApplicationProvider>
   );
 };
 

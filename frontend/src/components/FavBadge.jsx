@@ -2,9 +2,10 @@ import React, { useContext } from 'react';
 import FavIcon from './FavIcon';
 import { FavoritesContext } from '../context/FavoritesContext';
 import '../styles/FavBadge.scss';
+import {ApplicationContext} from "../context/ApplicationContext";
 
 const FavBadge = () => {
-    const { favoritePhotos } = useContext(FavoritesContext);
+    const { state: { favoritePhotos } } = useContext(ApplicationContext);
     const doesFavPhotoExist = favoritePhotos.length > 0;
 
     return (

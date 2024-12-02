@@ -4,6 +4,7 @@ import "../styles/PhotoFavButton.scss"
 import PhotoFavButton from "./PhotoFavButton";
 import {FavoritesContext} from "../context/FavoritesContext";
 import {ModalContext} from "../context/ModalContext";
+import {ApplicationContext} from "../context/ApplicationContext";
 
 const PhotoListItem = ({
                            id,
@@ -12,7 +13,7 @@ const PhotoListItem = ({
                            username,
                            profile
                        }) => {
-    const {openModalWithDetails} = useContext(ModalContext);
+    const { openPhotoDetailsModal } = useContext(ApplicationContext);
     
     const photoDetails = {
         id, city, country, imageSource, username, profile
@@ -25,7 +26,7 @@ const PhotoListItem = ({
                 className="photo-list__image"
                 src={imageSource}
                 alt={`Photo by ${username}`}
-                onClick={()=>{openModalWithDetails(photoDetails)}}
+                onClick={()=>{openPhotoDetailsModal(photoDetails)}}
             />
             <div className="photo-list__user-info">
                 <img className="photo-list__user-profile" src={profile} alt={`${username}'s profile`}/>

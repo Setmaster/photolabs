@@ -1,58 +1,91 @@
-﻿import { useState, useCallback } from 'react';
+﻿import { useReducer, useCallback } from 'react';
+
+// action types
+export const ACTIONS = {
+    FAV_PHOTO_ADDED: 'FAV_PHOTO_ADDED',
+    FAV_PHOTO_REMOVED: 'FAV_PHOTO_REMOVED',
+    SET_PHOTO_DATA: 'SET_PHOTO_DATA',
+    SET_TOPIC_DATA: 'SET_TOPIC_DATA',
+    OPEN_MODAL: 'SELECT_PHOTO',
+    CLOSE_MODAL: 'DISPLAY_PHOTO_DETAILS'
+};
+
+// initial state
+const initialState = {
+    isModalOpen: false,
+    photoDetails: null,
+    favoritePhotos: []
+};
+
+function reducer(state, action) {
+    switch (action.type) {
+        case ACTIONS.FAV_PHOTO_ADDED:
+            return {
+                ...state,
+                favoritePhotos: [...state.favoritePhotos, action.photoId]
+            };
+        case ACTIONS.FAV_PHOTO_REMOVED:
+            return {
+                ...state,
+                favoritePhotos: state.favoritePhotos.filter(id => id !== action.photoId)
+            };
+        case ACTIONS.OPEN_MODAL:
+            return {
+                ...state,
+                photoDetails: action.details,
+                isModalOpen: true
+            };
+        case ACTIONS.CLOSE_MODAL:
+            return {
+                ...state,
+                photoDetails: null,
+                isModalOpen: false
+            };
+        default:
+            throw new Error(`Tried to reduce with unsupported action type: ${action.type}`);
+    }
+}
 
 const useApplicationData = () => {
-    // modal state
-    const [isModalOpen, setModalOpen] = useState(false);
-    const [photoDetails, setPhotoDetails] = useState(null);
-
-    // favorites state
-    const [favoritePhotos, setFavoritePhotos] = useState([]);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     // toggle modal state
     const toggleModal = useCallback(() => {
-        setModalOpen(prevState => !prevState);
-    }, []);
+        dispatch({
+            type: state.isModalOpen ? ACTIONS.CLOSE_MODAL : ACTIONS.OPEN_MODAL,
+            details: state.photoDetails
+        });
+    }, [state.isModalOpen, state.photoDetails]);
 
     // set photo details and open modal
-    const openModalWithDetails = useCallback((details) => {
-        setPhotoDetails(details);
-        setModalOpen(true);
+    const openPhotoDetailsModal = useCallback((details) => {
+        dispatch({ type: ACTIONS.OPEN_MODAL, details });
     }, []);
 
     // close photo details modal
-    const onClosePhotoDetailsModal = useCallback(() => {
-        setPhotoDetails(null);
-        setModalOpen(false);
+    const closePhotoDetailsModal = useCallback(() => {
+        dispatch({ type: ACTIONS.CLOSE_MODAL });
     }, []);
 
     // toggle favorite photo's ID
     const updateToFavPhotoIds = useCallback((photoId) => {
-        setFavoritePhotos((prevFavorites) => {
-            if (prevFavorites.includes(photoId)) {
-                return prevFavorites.filter((id) => id !== photoId);
-            } else {
-                return [...prevFavorites, photoId];
-            }
-        });
-    }, []);
+        if (state.favoritePhotos.includes(photoId)) {
+            dispatch({ type: ACTIONS.FAV_PHOTO_REMOVED, photoId });
+        } else {
+            dispatch({ type: ACTIONS.FAV_PHOTO_ADDED, photoId });
+        }
+    }, [state.favoritePhotos]);
 
     // placeholder
     const onLoadTopic = useCallback(() => {
         // TODO
     }, []);
 
-    // the entire state object
-    const state = {
-        isModalOpen,
-        photoDetails,
-        favoritePhotos
-    };
-
     return {
         state,
         updateToFavPhotoIds,
-        setPhotoSelected: openModalWithDetails,
-        onClosePhotoDetailsModal,
+        openPhotoDetailsModal,
+        closePhotoDetailsModal,
         onLoadTopic
     };
 };

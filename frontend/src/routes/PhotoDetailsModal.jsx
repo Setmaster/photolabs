@@ -6,9 +6,10 @@ import {ModalContext} from "../context/ModalContext";
 import PhotoList from "../components/PhotoList";
 import {getSimilarPhotos} from "../lib/helpers";
 import PhotoFavButton from "../components/PhotoFavButton";
+import {ApplicationContext} from "../context/ApplicationContext";
 
 const PhotoDetailsModal = () => {
-    const {photoDetails, toggleModal} = useContext(ModalContext);
+    const { state: { photoDetails }, closePhotoDetailsModal } = useContext(ApplicationContext);
     
     // will be used to store a reference to the modal
     const modalRef = useRef();
@@ -26,7 +27,7 @@ const PhotoDetailsModal = () => {
             // if we have the modal reference and the element clicked is not within
             // it, then we close the modal
             if (modalRef.current && !modalRef.current.contains(event.target)) {
-                toggleModal();
+                closePhotoDetailsModal();
             }
         };
 
@@ -36,11 +37,11 @@ const PhotoDetailsModal = () => {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [toggleModal]);
+    }, [closePhotoDetailsModal]);
     
   return (
       <div className="photo-details-modal" ref={modalRef}>
-          <button className="photo-details-modal__close-button" onClick={toggleModal}>
+          <button className="photo-details-modal__close-button" onClick={closePhotoDetailsModal}>
               <img src={closeSymbol} alt="close symbol"/>
           </button>
           <div className="photo-details-modal__content">
