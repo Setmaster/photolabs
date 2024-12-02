@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useRef} from 'react';
 
 import '../styles/PhotoDetailsModal.scss'
 import closeSymbol from '../assets/closeSymbol.svg';
@@ -9,16 +9,37 @@ import PhotoFavButton from "../components/PhotoFavButton";
 
 const PhotoDetailsModal = () => {
     const {photoDetails, toggleModal} = useContext(ModalContext);
-
+    
+    // will be used to store a reference to the modal
+    const modalRef = useRef();
+    
     if (!photoDetails) return null; // prevent render if we don't have the details
 
     const {id, imageSource, username, city, country, profile} = photoDetails;
     
     // get similar photos which comes as an object of objects and convert to arrays of objs
     const similarPhotos = Object.values(getSimilarPhotos(id));
+
+    // handle clicks outside the modal
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            // if we have the modal reference and the element clicked is not within
+            // it, then we close the modal
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                toggleModal();
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // cleanup, triggered when component is unmounted or dependency changes
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [toggleModal]);
     
   return (
-      <div className="photo-details-modal">
+      <div className="photo-details-modal" ref={modalRef}>
           <button className="photo-details-modal__close-button" onClick={toggleModal}>
               <img src={closeSymbol} alt="close symbol"/>
           </button>
