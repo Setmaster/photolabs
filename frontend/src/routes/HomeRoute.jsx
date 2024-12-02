@@ -12,7 +12,7 @@ const HomeRoute = () => {
     <div className="home-route">
       <TopNavigationBar/>
       <PhotoList/>
-        {isModalOpen && <PhotoDetailsModal onClose={toggleModal} />}
+        {isModalOpen && <PhotoDetailsModal/>}
     </div>
   );
 };
