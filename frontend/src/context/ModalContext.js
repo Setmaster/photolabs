@@ -1,13 +1,14 @@
-﻿import React, { createContext, useState } from 'react';
+﻿import React, {createContext, useCallback, useState} from 'react';
 
 export const ModalContext = createContext();
 
 const ModalProvider = ({ children }) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const toggleModal = ()=>{
-        setModalOpen(!isModalOpen);
-    }
+    // toggle modal state
+    const toggleModal = useCallback(() => {
+        setModalOpen(prevState => !prevState);
+    }, []);
 
     return (
         <ModalContext.Provider value={{ isModalOpen, toggleModal }}>
