@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import FavIcon from './FavIcon';
-import { FavoritesContext } from '../context/FavoritesContext';
 import '../styles/FavBadge.scss';
 import {ApplicationContext} from "../context/ApplicationContext";
 

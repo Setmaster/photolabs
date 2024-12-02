@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import FavIcon from './FavIcon';
 import '../styles/PhotoFavButton.scss';
-import { FavoritesContext } from '../context/FavoritesContext';
 import {ApplicationContext} from "../context/ApplicationContext";
 
 function PhotoFavButton({ photoId, className }) {

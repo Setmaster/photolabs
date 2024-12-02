@@ -1,4 +1,4 @@
-﻿import { useReducer, useCallback } from 'react';
+﻿import {useCallback, useReducer} from 'react';
 
 // action types
 export const ACTIONS = {

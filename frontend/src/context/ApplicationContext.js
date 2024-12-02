@@ -1,4 +1,4 @@
-﻿import React, { createContext } from 'react';
+﻿import React, {createContext} from 'react';
 import useApplicationData from '../hooks/useApplicationData';
 
 export const ApplicationContext = createContext();
