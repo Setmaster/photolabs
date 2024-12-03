@@ -8,7 +8,7 @@ import {ApplicationContext} from "../context/ApplicationContext";
 
 const HomeRoute = () => {
     const {state: {isModalOpen, photoData, topicData}} = useContext(ApplicationContext);
-    console.log("topics data", topicData)
+    
     return (
         <div className="home-route">
             <TopNavigationBar topicData={topicData}/>

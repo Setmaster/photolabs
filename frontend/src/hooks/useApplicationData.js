@@ -61,20 +61,26 @@ function reducer(state, action) {
 const useApplicationData = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // fetch and store photo data
+    // fetch and store photos and topics data
     useEffect(() => {
-        fetch("/api/photos")
-            .then((response) => response.json())
-            .then((data) => dispatch({type: ACTIONS.SET_PHOTO_DATA, payload: data}))
-            .catch((error) => console.error('Error fetching photo data:', error));
-    }, []);
+        const fetchData = async () => {
+            try {
+                const [photoResponse, topicResponse] = await Promise.all([
+                    fetch("/api/photos"),
+                    fetch("/api/topics")
+                ]);
 
-    // fetch and store topic data
-    useEffect(() => {
-        fetch("/api/topics")
-            .then((response) => response.json())
-            .then((data) => dispatch({type: ACTIONS.SET_TOPIC_DATA, payload: data}))
-            .catch((error) => console.error('Error fetching topic data:', error));
+                const photoData = await photoResponse.json();
+                const topicData = await topicResponse.json();
+
+                dispatch({ type: ACTIONS.SET_PHOTO_DATA, payload: photoData });
+                dispatch({ type: ACTIONS.SET_TOPIC_DATA, payload: topicData });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     // toggle modal state
