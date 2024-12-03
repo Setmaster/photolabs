@@ -83,14 +83,6 @@ const useApplicationData = () => {
         fetchData();
     }, []);
 
-    // toggle modal state
-    const toggleModal = useCallback(() => {
-        dispatch({
-            type: state.isModalOpen ? ACTIONS.CLOSE_MODAL : ACTIONS.OPEN_MODAL,
-            details: state.photoDetails
-        });
-    }, [state.isModalOpen, state.photoDetails]);
-
     // set photo details and open modal
     const openPhotoDetailsModal = useCallback((details) => {
         dispatch({type: ACTIONS.OPEN_MODAL, details});
@@ -110,11 +102,28 @@ const useApplicationData = () => {
         }
     }, [state.favoritePhotos]);
 
+    // get photos by topic and set them as the photoData
+    const fetchPhotosByTopic = useCallback(async (topicId) => {
+        try {
+            let response;
+            if (topicId === null){
+                response = await fetch("/api/photos");
+            }else {
+                response = await fetch(`/api/topics/photos/${topicId}`);
+            }
+            const data = await response.json();
+            dispatch({ type: ACTIONS.SET_PHOTO_DATA, payload: data });
+        } catch (error) {
+            console.error('Error fetching photos for topic:', error);
+        }
+    }, []);
+    
     return {
         state,
         updateToFavPhotoIds,
         openPhotoDetailsModal,
         closePhotoDetailsModal,
+        fetchPhotosByTopic
     };
 };
 
