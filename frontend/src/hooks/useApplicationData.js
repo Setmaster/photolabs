@@ -110,17 +110,11 @@ const useApplicationData = () => {
         }
     }, [state.favoritePhotos]);
 
-    // placeholder
-    const onLoadTopic = useCallback(() => {
-        // TODO
-    }, []);
-
     return {
         state,
         updateToFavPhotoIds,
         openPhotoDetailsModal,
         closePhotoDetailsModal,
-        onLoadTopic
     };
 };
 
