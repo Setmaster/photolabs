@@ -1,4 +1,4 @@
-﻿import {useCallback, useReducer} from 'react';
+﻿import {useCallback, useReducer, useEffect} from 'react';
 
 // action types
 export const ACTIONS = {
@@ -14,7 +14,9 @@ export const ACTIONS = {
 const initialState = {
     isModalOpen: false,
     photoDetails: null,
-    favoritePhotos: []
+    favoritePhotos: [],
+    photoData: [],
+    topicData: []
 };
 
 function reducer(state, action) {
@@ -41,6 +43,16 @@ function reducer(state, action) {
                 photoDetails: null,
                 isModalOpen: false
             };
+        case ACTIONS.SET_PHOTO_DATA:
+            return {
+                ...state,
+                photoData: action.payload
+            };
+        case ACTIONS.SET_TOPIC_DATA:
+            return {
+                ...state,
+                topicData: action.payload
+            };
         default:
             throw new Error(`Tried to reduce with unsupported action type: ${action.type}`);
     }
@@ -48,6 +60,22 @@ function reducer(state, action) {
 
 const useApplicationData = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    // fetch and store photo data
+    useEffect(() => {
+        fetch("/api/photos")
+            .then((response) => response.json())
+            .then((data) => dispatch({type: ACTIONS.SET_PHOTO_DATA, payload: data}))
+            .catch((error) => console.error('Error fetching photo data:', error));
+    }, []);
+
+    // fetch and store topic data
+    useEffect(() => {
+        fetch("/api/topics")
+            .then((response) => response.json())
+            .then((data) => dispatch({type: ACTIONS.SET_TOPIC_DATA, payload: data}))
+            .catch((error) => console.error('Error fetching topic data:', error));
+    }, []);
 
     // toggle modal state
     const toggleModal = useCallback(() => {
@@ -59,20 +87,20 @@ const useApplicationData = () => {
 
     // set photo details and open modal
     const openPhotoDetailsModal = useCallback((details) => {
-        dispatch({ type: ACTIONS.OPEN_MODAL, details });
+        dispatch({type: ACTIONS.OPEN_MODAL, details});
     }, []);
 
     // close photo details modal
     const closePhotoDetailsModal = useCallback(() => {
-        dispatch({ type: ACTIONS.CLOSE_MODAL });
+        dispatch({type: ACTIONS.CLOSE_MODAL});
     }, []);
 
     // toggle favorite photo's ID
     const updateToFavPhotoIds = useCallback((photoId) => {
         if (state.favoritePhotos.includes(photoId)) {
-            dispatch({ type: ACTIONS.FAV_PHOTO_REMOVED, photoId });
+            dispatch({type: ACTIONS.FAV_PHOTO_REMOVED, photoId});
         } else {
-            dispatch({ type: ACTIONS.FAV_PHOTO_ADDED, photoId });
+            dispatch({type: ACTIONS.FAV_PHOTO_ADDED, photoId});
         }
     }, [state.favoritePhotos]);
 
